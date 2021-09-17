@@ -3,7 +3,7 @@ package repository.tables;
 import kpersistence.mapping.annotations.Column;
 import kpersistence.mapping.annotations.Id;
 
-public abstract class TypoTable {
+public abstract class StringIdTable {
 
     @Id
     @Column(name = "ID")

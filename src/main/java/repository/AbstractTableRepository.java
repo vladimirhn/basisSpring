@@ -3,7 +3,7 @@ package repository;
 import kpersistence.RandomId;
 import kpersistence.QueryGenerator;
 import kpersistence.UnnamedParametersQuery;
-import repository.tables.TypoTable;
+import repository.tables.StringIdTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -11,9 +11,9 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import java.lang.reflect.InvocationTargetException;
 import java.util.function.BiConsumer;
 
-public abstract class TypoTableRepository<T extends TypoTable> extends AbstractRepository<T> {
+public abstract class AbstractTableRepository<T extends StringIdTable> extends AbstractRepository<T> {
 
-    public TypoTableRepository(Class<T> clazz) {
+    public AbstractTableRepository(Class<T> clazz) {
         super(clazz);
     }
 

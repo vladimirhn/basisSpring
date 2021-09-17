@@ -1,8 +1,0 @@
-repository/mapping/KRowMapper.class
-repository/tables/TypoTable.class
-repository/AbstractRepository.class
-repository/TypoTableRepository.class
-repository/tables/MainTable.class
-repository/tables/TypoView.class
-repository/TypoViewRepository.class
-repository/tables/SubTable.class

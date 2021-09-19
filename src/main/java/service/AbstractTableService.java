@@ -9,7 +9,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-public abstract class TypoTableService<T extends StringIdTable> {
+public abstract class AbstractTableService<T extends StringIdTable> {
 
     protected abstract AbstractTableRepository<T> getRepository();
 

@@ -1,10 +1,9 @@
-package rest;
+package rest.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import kpersistence.mapping.annotations.Column;
 import kutils.ClassUtils;
-import rest.DictionaryDataProvider;
-import rest.KResponse;
+import rest.dictionary.DictionaryService;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -18,7 +17,7 @@ public class SimpleTableResponse extends KResponse {
     List<String> properties = new LinkedList<>();
     List<String> trans = new LinkedList<>();
 
-    public SimpleTableResponse(Collection<?> data, Class<?> type, DictionaryDataProvider dict) {
+    public SimpleTableResponse(Collection<?> data, Class<?> type, DictionaryService dict) {
 
         this.data = data;
 

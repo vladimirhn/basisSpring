@@ -1,4 +1,4 @@
-package rest;
+package rest.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 

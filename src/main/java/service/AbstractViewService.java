@@ -8,7 +8,7 @@ import koptional.KOptional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-public abstract class TypoViewService<T extends AbstractView> {
+public abstract class AbstractViewService<T extends AbstractView> {
 
     protected abstract AbstractViewRepository<T> getRepository();
 

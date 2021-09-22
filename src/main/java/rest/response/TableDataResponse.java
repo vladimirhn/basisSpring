@@ -38,7 +38,12 @@ public class TableDataResponse<T> {
                         field.isAnnotationPresent(JsonProperty.class)
                      && JsonProperty.Access.WRITE_ONLY.equals(field.getAnnotation(JsonProperty.class).access());
 
-                if (!isWriteOnly) {
+                boolean addToProperties =
+                        !field.isAnnotationPresent(JsonTableResponse.class)
+                     || field.getAnnotation(JsonTableResponse.class).addToProperties();
+
+                if (!isWriteOnly && addToProperties) {
+
                     properties.add(field.getName());
 
                     String translation = null;

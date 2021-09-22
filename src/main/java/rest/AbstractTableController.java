@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import rest.response.TableDataResponse;
 
+import java.util.List;
+
 public abstract class AbstractTableController<T extends StringIdTable> {
 
     protected abstract AbstractTableService<T> getService();
@@ -16,13 +18,18 @@ public abstract class AbstractTableController<T extends StringIdTable> {
 
     @GetMapping("/get_all")
     public TableDataResponse<T> getAll() {
-        return new TableDataResponse<>(getService().selectAll(), getDictionaryService());
+        return getAllTranslatedResponse(getService().selectAll());
+    }
+
+    protected TableDataResponse<T> getAllTranslatedResponse(List<T> data) {
+        return new TableDataResponse<>(data, getDictionaryService());
     }
 
     @PostMapping("/add")
     public void add(@RequestBody T data) {
         getService().insert(data);
     }
+
     @PostMapping("/update")
     public void update(@RequestBody T data) {
         getService().update(data);

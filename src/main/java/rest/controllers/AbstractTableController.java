@@ -1,4 +1,4 @@
-package rest;
+package rest.controllers;
 
 import repository.tables.StringIdTable;
 import rest.dictionary.DictionaryService;

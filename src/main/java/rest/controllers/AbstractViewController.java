@@ -1,4 +1,4 @@
-package rest;
+package rest.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import repository.tables.AbstractView;

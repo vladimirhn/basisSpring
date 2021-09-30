@@ -1,7 +1,9 @@
 package rest.data;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import kcollections.KList;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -9,6 +11,7 @@ public class EntryTransferData {
 
     String id;
     String name;
+    BigDecimal qty;
 
     Integer intData0;
 
@@ -18,6 +21,8 @@ public class EntryTransferData {
 
     LocalDate dateData0;
 
+    KList<EntryTransferData> subList0;
+
     EntryTransferData() {}
 
     public EntryTransferData(String id) {
@@ -25,8 +30,13 @@ public class EntryTransferData {
     }
 
     public EntryTransferData(String id, String name) {
-        this.id = id;
+        this(id);
         this.name = name;
+    }
+
+    public EntryTransferData(String id, String name, BigDecimal qty) {
+        this(id, name);
+        this.qty = qty;
     }
 
     public String getId() {
@@ -43,6 +53,14 @@ public class EntryTransferData {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public BigDecimal getQty() {
+        return qty;
+    }
+
+    public void setQty(BigDecimal qty) {
+        this.qty = qty;
     }
 
     public Integer getIntData0() {
@@ -75,5 +93,13 @@ public class EntryTransferData {
 
     public void setDateData0(LocalDate dateData0) {
         this.dateData0 = dateData0;
+    }
+
+    public KList<EntryTransferData> getSubList0() {
+        return subList0;
+    }
+
+    public void setSubList0(KList<EntryTransferData> subList0) {
+        this.subList0 = subList0;
     }
 }

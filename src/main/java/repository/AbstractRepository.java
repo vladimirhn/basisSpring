@@ -52,6 +52,9 @@ public abstract class AbstractRepository<T> {
 
     public KList<T> selectAll() {
         String sql = QueryGenerator.generateSelectAllQuery(modelClass);
+
+        System.out.println(sql);
+
         return CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
     }
 
@@ -64,7 +67,7 @@ public abstract class AbstractRepository<T> {
 
         System.out.println(selectQuery.getQuery());
 
-        KList<T> res = CollectionFactory.makeListFrom(jdbcOperations::query, selectQuery.getQuery(), selectQuery.getParams(), rowMapper);
+        KList<T> res = CollectionFactory.makeList(jdbcOperations.query(selectQuery.getQuery(), selectQuery.getParams(), rowMapper));
 
         return res;
     }

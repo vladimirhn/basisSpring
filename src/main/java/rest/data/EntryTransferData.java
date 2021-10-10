@@ -102,4 +102,9 @@ public class EntryTransferData {
     public void setSubList0(KList<EntryTransferData> subList0) {
         this.subList0 = subList0;
     }
+
+    //Util methods
+    public void denullifyQty() {
+        if (qty == null) qty = BigDecimal.ZERO;
+    }
 }

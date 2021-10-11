@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -58,12 +59,12 @@ public class KRowMapper<T> implements RowMapper<T> {
                     Class<?> fieldType = field.getType();
                     Class<?> dataType = data != null ? data.getClass() : Object.class;
 
-                    if (fieldType.equals(LocalDate.class) && dataType.equals(String.class)) {
-                        field.set(obj, LocalDate.parse(data.toString()));
+                    if (fieldType.equals(LocalDate.class) && dataType.equals(Timestamp.class)) {
+                        field.set(obj, ((Timestamp) data).toLocalDateTime().toLocalDate());
                     }
 
-                    if (fieldType.equals(LocalDateTime.class) && dataType.equals(String.class)) {
-                        field.set(obj, LocalDateTime.parse(data.toString()));
+                    if (fieldType.equals(LocalDateTime.class) && dataType.equals(Timestamp.class)) {
+                        field.set(obj, ((Timestamp) data).toLocalDateTime());
                     }
 
                     if (fieldType.equals(Long.class) && dataType.equals(Integer.class)) {
@@ -85,7 +86,8 @@ public class KRowMapper<T> implements RowMapper<T> {
                         }
                     }
 
-                    //Sqlite boolean processing
+                    //Sqlite
+                    // boolean processing
                     if (fieldType.equals(Boolean.class)) {
                         if ("1".equals(String.valueOf(data))) {
                             field.set(obj, true);
@@ -93,6 +95,14 @@ public class KRowMapper<T> implements RowMapper<T> {
                         if ("0".equals(String.valueOf(data))) {
                             field.set(obj, false);
                         }
+                    }
+                    //LocalDate(Time)
+                    if (fieldType.equals(LocalDate.class) && dataType.equals(String.class)) {
+                        field.set(obj, LocalDate.parse(data.toString()));
+                    }
+
+                    if (fieldType.equals(LocalDateTime.class) && dataType.equals(String.class)) {
+                        field.set(obj, LocalDateTime.parse(data.toString()));
                     }
 
                     //default

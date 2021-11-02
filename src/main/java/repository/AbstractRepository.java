@@ -55,7 +55,8 @@ public abstract class AbstractRepository<T> {
 
         System.out.println(sql);
 
-        return CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
+        KList<T> result = CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
+        return result;
     }
 
     public Stream<T> streamAll() {

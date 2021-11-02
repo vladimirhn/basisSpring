@@ -1,9 +1,6 @@
 package repository.mapping;
 
-import kpersistence.mapping.annotations.Column;
-import kpersistence.mapping.annotations.Foreign;
-import kpersistence.mapping.annotations.Label;
-import kpersistence.mapping.annotations.Table;
+import kpersistence.mapping.annotations.*;
 import kutils.ClassUtils;
 import org.springframework.jdbc.core.RowMapper;
 
@@ -51,6 +48,10 @@ public class KRowMapper<T> implements RowMapper<T> {
                                 .getAnnotation(Column.class).name();
 
                         colName = foreignTableName + "_" + foreignColumnName;
+
+                    } else if (field.isAnnotationPresent(CurrentUserId.class)) {
+
+                        colName = field.getAnnotation(CurrentUserId.class).columnName();
                     }
 
                     Object data = rs.getObject(colName);

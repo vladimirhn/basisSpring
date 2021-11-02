@@ -90,7 +90,7 @@ public abstract class AbstractRepository<T> {
     }
 
     //KFilters
-    public List<T> search(Filter... filters) {
+    public List<T> search(Filter<?,?>... filters) {
         List<T> result = new ArrayList<>();
 
         getPartedFilters(filters).forEach(filtersSet -> {
@@ -105,7 +105,7 @@ public abstract class AbstractRepository<T> {
         return result;
     }
 
-    public List<T> search(int limit, Filter... filters) {
+    public List<T> search(int limit, Filter<?,?>... filters) {
         List<T> result = new ArrayList<>();
 
         getPartedFilters(filters).forEach(filtersSet -> {
@@ -120,7 +120,7 @@ public abstract class AbstractRepository<T> {
         return result;
     }
 
-    public List<T> search(int limit, int offset, Filter... filters) {
+    public List<T> search(int limit, int offset, Filter<?,?>... filters) {
         List<T> result = new ArrayList<>();
 
         getPartedFilters(filters).forEach(filtersSet -> {
@@ -135,7 +135,7 @@ public abstract class AbstractRepository<T> {
         return result;
     }
 
-    public <O> List<T> search(int limit, int offset, Class<O> orderByFieldType, BiConsumer<T, O> orderByFieldSetter, Filter... filters) {
+    public <O> List<T> search(int limit, int offset, Class<O> orderByFieldType, BiConsumer<T, O> orderByFieldSetter, Filter<?,?>... filters) {
         List<T> result = new ArrayList<>();
 
         getPartedFilters(filters).forEach(filtersSet -> {
@@ -150,7 +150,7 @@ public abstract class AbstractRepository<T> {
         return result;
     }
 
-    private List<T> executeSelect(QueryComposer<T> composer, String sql, Filter[] filters) {
+    private List<T> executeSelect(QueryComposer<T> composer, String sql, Filter<?,?>[] filters) {
 
         Map<String, Object> params = composer.getParams();
         String formattedParams = params.toString().replace(", p", "\np").replace("{", "").replace("}", "").replace("=", ": ");

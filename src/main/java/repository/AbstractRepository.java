@@ -68,9 +68,8 @@ public abstract class AbstractRepository<T> {
 
         System.out.println(selectQuery.getQuery());
 
-        KList<T> res = CollectionFactory.makeList(jdbcOperations.query(selectQuery.getQuery(), selectQuery.getParams(), rowMapper));
-
-        return res;
+        KList<T> result = CollectionFactory.makeList(jdbcOperations.query(selectQuery.getQuery(), selectQuery.getParams(), rowMapper));
+        return result;
     }
 
     public KList<T> selectWithQuery(String sql) {
@@ -86,7 +85,7 @@ public abstract class AbstractRepository<T> {
 
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             e.printStackTrace();
-            return CollectionFactory.makeLinkedList();
+            return CollectionFactory.makeArrayList();
         }
     }
 

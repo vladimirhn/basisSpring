@@ -21,14 +21,17 @@ public class UsersService extends AbstractTableService<User> {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public User saveUser(User user) {
-        user.setRole("ROLE_USER");
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User createUser(String login, String password) {
+
+        User user = new User(login, "ROLE_USER", passwordEncoder.encode(password));
 
         String newUserId = repository.insert(user);
-
         user.setId(newUserId);
         return user;
+    }
+
+    public boolean isLoginExists(String login) {
+        return repository.selectByField(User::setLogin, login).isNotEmpty();
     }
 
     public User findByLogin(String login) {

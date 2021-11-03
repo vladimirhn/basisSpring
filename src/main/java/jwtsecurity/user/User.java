@@ -18,6 +18,19 @@ public class User extends StringIdTable {
     @Column(name = "password")
     private String password;
 
+    public User() {}
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(String login, String role, String password) {
+        this.login = login;
+        this.role = role;
+        this.password = password;
+    }
+
     @Override
     public void setDefaults() {}
 

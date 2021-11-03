@@ -23,17 +23,33 @@ public class AuthController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody RegistrationRequest registrationRequest) {
-        User u = new User();
-        u.setPassword(registrationRequest.getPassword());
-        u.setLogin(registrationRequest.getLogin());
-        userService.saveUser(u);
-        return "OK";
+    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+    public AuthResponse registerUser(@RequestBody RegistrationRequest registrationRequest,
+                               HttpServletRequest httpRequest, HttpServletResponse response) {
+
+        if (userService.isLoginExists(registrationRequest.getLogin())) {
+            return null;
+        }
+
+        User newbie = userService.createUser(registrationRequest.getLogin(), registrationRequest.getPassword());
+
+        return makeSuccessAuthResponse(response, newbie);
     }
 
     @PostMapping("/auth")
     @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
-    public AuthResponse auth(@RequestBody AuthRequest request, HttpServletRequest httpRequest, HttpServletResponse response) {
+    public AuthResponse auth(@RequestBody AuthRequest request,
+                             HttpServletRequest httpRequest, HttpServletResponse response) {
+
+
+        User user = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
+
+        if (user == null) throw new IllegalStateException("no user");
+
+        return makeSuccessAuthResponse(response, user);
+    }
+
+    private AuthResponse makeSuccessAuthResponse(HttpServletResponse response, User newbie) {
 
         long authDaysDuration = 15 * 24 * 60 * 60;
         long authDaysDurationMillies = authDaysDuration * 1000;
@@ -41,8 +57,7 @@ public class AuthController {
 
         Date expDate = new Date(expMillies);
 
-        User user = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
-        String token = jwtProvider.generateToken(user.getLogin(), expDate);
+        String token = jwtProvider.generateToken(newbie.getId(), expDate);
 
         final ResponseCookie responseCookie = ResponseCookie
                 .from("a", token)
@@ -54,6 +69,6 @@ public class AuthController {
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
 
-        return new AuthResponse(user.getLogin(), String.valueOf(expMillies));
+        return new AuthResponse(newbie.getLogin(), String.valueOf(expMillies));
     }
 }

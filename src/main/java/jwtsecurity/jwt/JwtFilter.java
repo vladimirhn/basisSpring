@@ -1,6 +1,8 @@
 package jwtsecurity.jwt;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -36,9 +39,6 @@ public class JwtFilter extends GenericFilterBean {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
-//        StringBuilder tokenBuilder = new StringBuilder(200);
-//        tokenBuilder.append(request.getHeader(AUTHORIZATION));
-
         String token = null;
 
         Cookie[] cookies = request.getCookies();
@@ -50,19 +50,27 @@ public class JwtFilter extends GenericFilterBean {
             }
         }
 
-        if (token != null) {
+        if (token != null && jwtProvider.validateToken(token)) {
+            try {
 
-//            String token = tokenBuilder.append(signature).toString();
-
-
-
-            if (jwtProvider.validateToken(token)) {
-                String userLogin = jwtProvider.parseToken(token).getSubject();
+                String userId = jwtProvider.parseToken(token).getSubject();
 //                Date expiration = jwtProvider.parseToken(token).getExpiration();
-                CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(userLogin);
+                CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(userId);
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
 
                 SecurityContextHolder.getContext().setAuthentication(auth);
+
+            } catch (Exception e) {
+
+                final ResponseCookie responseCookie = ResponseCookie
+                        .from("a", token)
+                        .secure(true)
+                        .httpOnly(true)
+                        .path("/")
+                        .maxAge(0)
+                        .sameSite("Strict")
+                        .build();
+                ((HttpServletResponse)servletResponse).addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
             }
         }
 

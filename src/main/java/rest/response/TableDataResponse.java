@@ -7,9 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import rest.dictionary.DictionaryService;
 
 import java.lang.reflect.Field;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TableDataResponse<T> {
@@ -19,6 +17,10 @@ public class TableDataResponse<T> {
     List<T> data;
     List<String> properties = new LinkedList<>();
     List<String> trans = new LinkedList<>();
+
+    public TableDataResponse(Set<T> data, DictionaryService dictionaryService) {
+        this(new ArrayList<>(data), dictionaryService);
+    }
 
     public TableDataResponse(List<T> data, DictionaryService dictionaryService) {
 

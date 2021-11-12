@@ -6,10 +6,7 @@ import jwtsecurity.user.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +20,7 @@ public class AuthController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/register")
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+//    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     public AuthResponse registerUser(@RequestBody RegistrationRequest registrationRequest,
                                HttpServletRequest httpRequest, HttpServletResponse response) {
 
@@ -37,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/auth")
-    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+//    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
     public AuthResponse auth(@RequestBody AuthRequest request,
                              HttpServletRequest httpRequest, HttpServletResponse response) {
 
@@ -70,5 +67,20 @@ public class AuthController {
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
 
         return new AuthResponse(newbie.getLogin(), String.valueOf(expMillies));
+    }
+
+    @GetMapping("/u/logout")
+//    @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+    public void logout(HttpServletRequest httpRequest, HttpServletResponse response) {
+
+        final ResponseCookie responseCookie = ResponseCookie
+                .from("a", "")
+                .secure(true)
+                .httpOnly(true)
+                .path("/")
+                .maxAge(1)
+                .sameSite("Strict")
+                .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
     }
 }

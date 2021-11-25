@@ -18,7 +18,8 @@ public abstract class AbstractTableController<T extends StringIdTable> {
 
     @GetMapping("/get_all")
     public TableDataResponse<T> getAll() {
-        return getAllTranslatedResponse(getService().selectAll());
+        TableDataResponse<T> result = getAllTranslatedResponse(getService().selectAll());
+        return result;
     }
 
     protected TableDataResponse<T> getAllTranslatedResponse(List<T> data) {

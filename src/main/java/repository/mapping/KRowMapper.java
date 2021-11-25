@@ -1,5 +1,6 @@
 package repository.mapping;
 
+import kpersistence.QueryGenerator;
 import kpersistence.mapping.annotations.*;
 import kutils.ClassUtils;
 import org.springframework.jdbc.core.RowMapper;
@@ -50,9 +51,6 @@ public class KRowMapper<T> implements RowMapper<T> {
 
                         colName = foreignTableName + "_" + foreignColumnName;
 
-                    } else if (field.isAnnotationPresent(CurrentUserId.class)) {
-
-                        colName = field.getAnnotation(CurrentUserId.class).columnName();
                     }
 
                     Object data = rs.getObject(colName);

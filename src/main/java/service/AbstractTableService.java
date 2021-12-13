@@ -72,6 +72,10 @@ public abstract class AbstractTableService<T extends StringIdTable> {
         getRepository().delete(id);
     }
 
+    public void softDelete(String id) {
+        getRepository().softDelete(id);
+    }
+
     public void deleteSimilar(T obj) {
         getRepository().deleteSimilar(obj);
     }

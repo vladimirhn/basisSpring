@@ -3,6 +3,7 @@ package repository;
 import kpersistence.RandomId;
 import kpersistence.QueryGenerator;
 import kpersistence.UnnamedParametersQuery;
+import kpersistence.types.SoftDelete;
 import repository.tables.StringIdTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -63,6 +64,22 @@ public abstract class AbstractTableRepository<T extends StringIdTable> extends A
             instance.setId(id);
 
             UnnamedParametersQuery qry = QueryGenerator.generateDeleteQuery(instance);
+            jdbcOperations.update(qry.getQuery(), qry.getParams());
+
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void softDelete(String id) {
+        try {
+            T instance = modelClass.getDeclaredConstructor().newInstance();
+            instance.setId(id);
+            if (instance instanceof SoftDelete) {
+                ((SoftDelete) instance).setDeleted(true);
+            }
+
+            UnnamedParametersQuery qry = QueryGenerator.generateUpdateQuery(instance);
             jdbcOperations.update(qry.getQuery(), qry.getParams());
 
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

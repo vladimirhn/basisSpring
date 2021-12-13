@@ -6,6 +6,7 @@ import koptional.KOptional;
 import kpersistence.QueryGenerator;
 import kpersistence.UnnamedParametersQuery;
 import kpersistence.kfilters.*;
+import kpersistence.query.QueryProperties;
 import repository.mapping.KRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -56,6 +57,18 @@ public abstract class AbstractRepository<T> {
         System.out.println(sql);
 
         KList<T> result = CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
+        return result;
+    }
+
+    public KList<T> select(QueryProperties<T> props) {
+        if (props == null) {
+            props = QueryProperties.createDefault(modelClass);
+        }
+        UnnamedParametersQuery selectQuery = QueryGenerator.generateSelectQuery(props);
+
+        System.out.println(selectQuery.getQuery() + " " + Arrays.toString(selectQuery.getParams()));
+
+        KList<T> result = CollectionFactory.makeList(jdbcOperations.query(selectQuery.getQuery(), selectQuery.getParams(), rowMapper));
         return result;
     }
 

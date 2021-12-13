@@ -1,5 +1,6 @@
 package service;
 
+import kpersistence.query.QueryProperties;
 import repository.tables.StringIdTable;
 import repository.AbstractTableRepository;
 import kcollections.KList;
@@ -31,6 +32,13 @@ public abstract class AbstractTableService<T extends StringIdTable> {
 
     public KList<T> selectAll() {
         return getRepository().selectAll();
+    }
+
+    public KList<T> select() {
+        return select(null);
+    }
+    public KList<T> select(QueryProperties<T> props) {
+        return getRepository().select(props);
     }
 
     public Stream<T> streamAll() {

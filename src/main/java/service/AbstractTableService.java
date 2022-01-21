@@ -1,11 +1,15 @@
 package service;
 
+import kmodels.IdLabelWithParentList;
+import kpersistence.query.KFilter;
 import kpersistence.query.QueryProperties;
 import repository.tables.StringIdTable;
 import repository.AbstractTableRepository;
 import kcollections.KList;
 import koptional.KOptional;
+import rest.response.tables.TableDataResponse;
 
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
@@ -34,6 +38,10 @@ public abstract class AbstractTableService<T extends StringIdTable> {
         return getRepository().selectAll();
     }
 
+    public <F extends KFilter> KList<T> selectFiltered(F filter) {
+        return getRepository().selectFiltered(filter);
+    }
+
     public KList<T> select() {
         return select(null);
     }
@@ -51,6 +59,14 @@ public abstract class AbstractTableService<T extends StringIdTable> {
 
     public <V> KList<T> selectByField(BiConsumer<T, V> fieldSetter, V fieldValue) {
         return getRepository().selectByField(fieldSetter, fieldValue);
+    }
+
+    public Map<String, Object> selectIdToLabelsMap() {
+        return getRepository().selectIdToLabelsMap();
+    }
+
+    public IdLabelWithParentList getHierarchicalLabels() {
+        return new IdLabelWithParentList(getRepository().selectIdToLabelWithParent());
     }
 
     //INSERT

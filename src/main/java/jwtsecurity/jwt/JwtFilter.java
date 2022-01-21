@@ -18,7 +18,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static io.jsonwebtoken.lang.Strings.hasText;
@@ -50,6 +53,10 @@ public class JwtFilter extends GenericFilterBean {
             }
         }
 
+        if (token == null){
+            token = getTokenFromRequest(request);
+        }
+
         if (token != null && jwtProvider.validateToken(token)) {
             try {
 
@@ -75,5 +82,13 @@ public class JwtFilter extends GenericFilterBean {
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
+    }
+
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String bearer = request.getHeader(AUTHORIZATION);
+        if (hasText(bearer) && bearer.startsWith("Bearer ")) {
+            return bearer.substring(7);
+        }
+        return null;
     }
 }

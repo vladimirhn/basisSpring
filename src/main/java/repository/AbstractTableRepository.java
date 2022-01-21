@@ -1,15 +1,23 @@
 package repository;
 
+import kcollections.CollectionFactory;
+import kcollections.KList;
+import kmodels.IdLabelWithParent;
 import kpersistence.RandomId;
 import kpersistence.QueryGenerator;
 import kpersistence.UnnamedParametersQuery;
+import kpersistence.mapping.annotations.Label;
 import kpersistence.types.SoftDelete;
+import kutils.ClassUtils;
 import repository.tables.StringIdTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.BiConsumer;
 
 public abstract class AbstractTableRepository<T extends StringIdTable> extends AbstractRepository<T> {
@@ -23,6 +31,37 @@ public abstract class AbstractTableRepository<T extends StringIdTable> extends A
 
     @Autowired
     protected NamedParameterJdbcOperations namedParameterJdbcOperations;
+
+    public Map<String, Object> selectIdToLabelsMap() {
+
+        Field labelField = ClassUtils.getFirstFieldByAnnotation(modelClass, Label.class);
+        labelField.setAccessible(true);
+
+        String sql = QueryGenerator.generateSelectIdToLabelsQuery(modelClass);
+
+        System.out.println(sql);
+
+        KList<T> dbResult = CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
+
+        Map<String, Object> result = new HashMap<>();
+        dbResult.forEach(entry -> {
+            try {
+                result.put(entry.getId(), labelField.get(entry));
+            } catch (IllegalAccessException ignored) {}
+        });
+        return result;
+    }
+
+    public KList<IdLabelWithParent> selectIdToLabelWithParent() {
+
+        String sql = QueryGenerator.generateSelectIdToLabelsWithParentQuery(modelClass);
+
+        System.out.println(sql);
+
+        KList<IdLabelWithParent> result = CollectionFactory.makeListFrom(jdbcOperations::query, sql,k4StringsRowMapper);
+
+        return result;
+    }
 
     public String insert(T obj) {
         String id = RandomId.next();

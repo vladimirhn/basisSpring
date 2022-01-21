@@ -2,11 +2,14 @@ package repository;
 
 import kcollections.CollectionFactory;
 import kcollections.KList;
+import kmodels.IdLabelWithParent;
 import koptional.KOptional;
 import kpersistence.QueryGenerator;
 import kpersistence.UnnamedParametersQuery;
 import kpersistence.kfilters.*;
+import kpersistence.query.KFilter;
 import kpersistence.query.QueryProperties;
+import repository.mapping.K4StringsRowMapper;
 import repository.mapping.KRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -15,10 +18,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,10 +27,12 @@ public abstract class AbstractRepository<T> {
 
     protected Class<T> modelClass;
     protected RowMapper<T> rowMapper;
+    protected K4StringsRowMapper<IdLabelWithParent> k4StringsRowMapper;
 
     public AbstractRepository(Class<T> clazz) {
         modelClass = clazz;
         rowMapper = new KRowMapper<>(clazz);
+        k4StringsRowMapper = new K4StringsRowMapper<>(IdLabelWithParent.class);
     }
 
     @Autowired
@@ -57,6 +59,16 @@ public abstract class AbstractRepository<T> {
         System.out.println(sql);
 
         KList<T> result = CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
+        return result;
+    }
+
+    public KList<T> selectFiltered(KFilter filter) {
+
+        UnnamedParametersQuery selectQuery = QueryGenerator.generateSelectFilteredQuery(modelClass, filter);
+
+        System.out.println(selectQuery.getQuery() + " " + Arrays.toString(selectQuery.getParams()));
+
+        KList<T> result = CollectionFactory.makeList(jdbcOperations.query(selectQuery.getQuery(), selectQuery.getParams(), rowMapper));
         return result;
     }
 

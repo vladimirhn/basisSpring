@@ -3,7 +3,7 @@ package rest.controllers;
 import org.springframework.web.bind.annotation.GetMapping;
 import repository.tables.AbstractView;
 import rest.dictionary.DictionaryService;
-import rest.response.TableDataResponse;
+import rest.response.tables.TableDataResponse;
 import service.AbstractViewService;
 
 public abstract class AbstractViewController<T extends AbstractView> {

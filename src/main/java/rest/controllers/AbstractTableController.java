@@ -1,5 +1,7 @@
 package rest.controllers;
 
+import kmodels.IdLabelWithParentList;
+import kpersistence.query.KFilter;
 import repository.tables.StringIdTable;
 import rest.dictionary.DictionaryService;
 import service.AbstractTableService;
@@ -7,11 +9,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import rest.response.TableDataResponse;
+import rest.response.tables.TableDataResponse;
 
 import java.util.List;
+import java.util.Map;
 
-public abstract class AbstractTableController<T extends StringIdTable> {
+public abstract class AbstractTableController<T extends StringIdTable, F extends KFilter> {
 
     protected abstract AbstractTableService<T> getService();
     protected abstract DictionaryService getDictionaryService();
@@ -19,6 +22,12 @@ public abstract class AbstractTableController<T extends StringIdTable> {
     @GetMapping("/get_all")
     public TableDataResponse<T> getAll() {
         TableDataResponse<T> result = getAllTranslatedResponse(getService().selectAll());
+        return result;
+    }
+
+    @PostMapping("/get_filtered")
+    public TableDataResponse<T> getFiltered(@RequestBody F filter) {
+        TableDataResponse<T> result = getAllTranslatedResponse(getService().selectFiltered(filter));
         return result;
     }
 
@@ -39,5 +48,16 @@ public abstract class AbstractTableController<T extends StringIdTable> {
     @GetMapping("/delete/{id}")
     public void delete(@PathVariable(value = "id") String id) {
         getService().delete(id);
+    }
+
+    @GetMapping("/get_labels")
+    public Map<String, Object> getLabels() {
+        Map<String, Object> result = getService().selectIdToLabelsMap();
+        return result;
+    }
+    @GetMapping("/get_hierarchical_labels")
+    public IdLabelWithParentList getHierarchicalLabels() {
+        IdLabelWithParentList result = getService().getHierarchicalLabels();
+        return result;
     }
 }

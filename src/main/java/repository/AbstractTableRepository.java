@@ -52,9 +52,9 @@ public abstract class AbstractTableRepository<T extends StringIdTable> extends A
         return result;
     }
 
-    public KList<IdLabelWithParent> selectIdToLabelWithParent() {
+    public KList<IdLabelWithParent> selectIdToLabelWithParent(Class<?> filterClass) {
 
-        String sql = QueryGenerator.generateSelectIdToLabelsWithParentQuery(modelClass);
+        String sql = QueryGenerator.generateSelectIdToLabelsWithParentQuery(modelClass, filterClass);
 
         System.out.println(sql);
 

@@ -1,6 +1,8 @@
 package rest.controllers;
 
+import kjson.OneStringJson;
 import kmodels.IdLabelWithParentList;
+import kpersistence.domain.Tables;
 import kpersistence.query.KFilter;
 import repository.tables.StringIdTable;
 import rest.dictionary.DictionaryService;
@@ -26,8 +28,8 @@ public abstract class AbstractTableController<T extends StringIdTable, F extends
     }
 
     @PostMapping("/get_filtered")
-    public TableDataResponse<T> getFiltered(@RequestBody F filter) {
-        TableDataResponse<T> result = getAllTranslatedResponse(getService().selectFiltered(filter));
+    public TableDataResponse<T> getFiltered(@RequestBody Map<String, String> filters) {
+        TableDataResponse<T> result = getAllTranslatedResponse(getService().selectFiltered(filters));
         return result;
     }
 
@@ -57,7 +59,12 @@ public abstract class AbstractTableController<T extends StringIdTable, F extends
     }
     @GetMapping("/get_hierarchical_labels")
     public IdLabelWithParentList getHierarchicalLabels() {
-        IdLabelWithParentList result = getService().getHierarchicalLabels();
+        IdLabelWithParentList result = getService().getHierarchicalLabels(null);
+        return result;
+    }
+    @PostMapping("/get_filtered_hierarchical_labels")
+    public IdLabelWithParentList getFilteredHierarchicalLabels(@RequestBody OneStringJson tableName) {
+        IdLabelWithParentList result = getService().getHierarchicalLabels(Tables.getModelClassByName(tableName.getValue()));
         return result;
     }
 }

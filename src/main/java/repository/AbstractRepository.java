@@ -62,9 +62,9 @@ public abstract class AbstractRepository<T> {
         return result;
     }
 
-    public KList<T> selectFiltered(KFilter filter) {
+    public KList<T> selectFiltered(Map<String, String> filters) {
 
-        UnnamedParametersQuery selectQuery = QueryGenerator.generateSelectFilteredQuery(modelClass, filter);
+        UnnamedParametersQuery selectQuery = QueryGenerator.generateSelectFilteredQuery(modelClass, filters);
 
         System.out.println(selectQuery.getQuery() + " " + Arrays.toString(selectQuery.getParams()));
 

@@ -38,8 +38,8 @@ public abstract class AbstractTableService<T extends StringIdTable> {
         return getRepository().selectAll();
     }
 
-    public <F extends KFilter> KList<T> selectFiltered(F filter) {
-        return getRepository().selectFiltered(filter);
+    public KList<T> selectFiltered(Map<String, String> filters) {
+        return getRepository().selectFiltered(filters);
     }
 
     public KList<T> select() {
@@ -65,8 +65,8 @@ public abstract class AbstractTableService<T extends StringIdTable> {
         return getRepository().selectIdToLabelsMap();
     }
 
-    public IdLabelWithParentList getHierarchicalLabels() {
-        return new IdLabelWithParentList(getRepository().selectIdToLabelWithParent());
+    public IdLabelWithParentList getHierarchicalLabels(Class<?> filterClass) {
+        return new IdLabelWithParentList(getRepository().selectIdToLabelWithParent(filterClass));
     }
 
     //INSERT

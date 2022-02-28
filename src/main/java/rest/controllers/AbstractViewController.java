@@ -13,6 +13,7 @@ public abstract class AbstractViewController<T extends AbstractView> {
 
     @GetMapping("/get_all")
     public TableDataResponse<T> getAll() {
-        return new TableDataResponse<>(getService().selectAll(), getDictionaryService());
+        TableDataResponse response =new TableDataResponse<>(getService().selectAll(), getDictionaryService());
+        return response;
     }
 }

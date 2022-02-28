@@ -37,9 +37,16 @@ public abstract class AbstractTableController<T extends StringIdTable, F extends
         return new TableDataResponse<>(data, getDictionaryService());
     }
 
-    @PostMapping("/add")
-    public void add(@RequestBody T data) {
+    @PostMapping("/insert")
+    public void insert(@RequestBody T data) {
         getService().insert(data);
+    }
+
+    @PostMapping("/insert_all")
+    public void insertAll(@RequestBody List<T> data) {
+        for (T datum : data) {
+            getService().insert(datum);
+        }
     }
 
     @PostMapping("/update")

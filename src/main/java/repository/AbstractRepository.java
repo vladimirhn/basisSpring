@@ -54,12 +54,14 @@ public abstract class AbstractRepository<T> {
     }
 
     public KList<T> selectAll() {
-        String sql = QueryGenerator.generateSelectAllQuery(modelClass);
 
-        System.out.println(sql);
-
-        KList<T> result = CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
-        return result;
+        return select(null);
+//        String sql = QueryGenerator.generateSelectAllQuery(modelClass);
+//
+//        System.out.println(sql);
+//
+//        KList<T> result = CollectionFactory.makeListFrom(jdbcOperations::query, sql, rowMapper);
+//        return result;
     }
 
     public KList<T> selectFiltered(Map<String, String> filters) {

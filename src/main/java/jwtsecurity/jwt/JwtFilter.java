@@ -1,33 +1,26 @@
 package jwtsecurity.jwt;
 
+import jwtsecurity.userdetails.CustomUserDetails;
+import jwtsecurity.userdetails.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.GenericFilterBean;
-import jwtsecurity.userdetails.CustomUserDetails;
-import jwtsecurity.userdetails.CustomUserDetailsService;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static io.jsonwebtoken.lang.Strings.hasText;
 
 @Component
-public class JwtFilter extends GenericFilterBean {
+public class JwtFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION = "Authorization";
 
@@ -38,7 +31,14 @@ public class JwtFilter extends GenericFilterBean {
     private CustomUserDetailsService customUserDetailsService;
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        boolean willNotFilter = path.startsWith("/register") || path.startsWith("/auth");
+        return willNotFilter;
+    }
+
+    @Override
+    public void doFilterInternal(HttpServletRequest servletRequest, HttpServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         HttpServletRequest request = (HttpServletRequest) servletRequest;
 
@@ -53,7 +53,7 @@ public class JwtFilter extends GenericFilterBean {
             }
         }
 
-        if (token == null){
+        if (token == null) {
             token = getTokenFromRequest(request);
         }
 

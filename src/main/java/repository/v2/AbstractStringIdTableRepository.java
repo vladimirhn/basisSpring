@@ -48,8 +48,7 @@ public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
         UnnamedParametersQuery query = new SelectFilteredQueryGenerator(data, user()).generateSelectFilteredQuery();
         System.out.println(query);
 
-//        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), rowMapper);
-        return null;
+        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), rowMapper);
     }
 
     public String insert(T data) {

@@ -1,16 +1,15 @@
-package repository;
+package repository.v1;
 
 import kcollections.CollectionFactory;
 import kcollections.KList;
 import kmodels.IdLabelWithParent;
 import koptional.KOptional;
-import kpersistence.QueryGenerator;
-import kpersistence.UnnamedParametersQuery;
-import kpersistence.kfilters.*;
-import kpersistence.query.KFilter;
-import kpersistence.query.QueryProperties;
-import repository.mapping.K4StringsRowMapper;
-import repository.mapping.KRowMapper;
+import kpersistence.v1.queryGeneration.QueryGenerator;
+import kpersistence.v2.UnnamedParametersQuery;
+import kpersistence.v1.kfilters.*;
+import kpersistence.v1.query.QueryProperties;
+import kpersistence.v1.mapping.rowMappers.K4StringsRowMapper;
+import kpersistence.v1.mapping.rowMappers.KRowMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -27,12 +26,12 @@ public abstract class AbstractRepository<T> {
 
     protected Class<T> modelClass;
     protected RowMapper<T> rowMapper;
-    protected K4StringsRowMapper<IdLabelWithParent> k4StringsRowMapper;
+    protected RowMapper<IdLabelWithParent> k4StringsRowMapper;
 
     public AbstractRepository(Class<T> clazz) {
         modelClass = clazz;
-        rowMapper = new KRowMapper<>(clazz);
-        k4StringsRowMapper = new K4StringsRowMapper<>(IdLabelWithParent.class);
+        rowMapper = new KRowMapper<>(clazz)::mapRow;
+        k4StringsRowMapper = new K4StringsRowMapper<>(IdLabelWithParent.class)::mapRow;
     }
 
     @Autowired

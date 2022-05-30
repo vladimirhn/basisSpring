@@ -1,17 +1,15 @@
-package rest.controllers;
+package rest.v1.controllers;
 
-import kjson.OneStringJson;
 import kmodels.IdLabelWithParentList;
-import kpersistence.domain.Tables;
-import kpersistence.query.KFilter;
-import repository.tables.StringIdTable;
-import rest.dictionary.DictionaryService;
-import service.AbstractTableService;
+import kpersistence.v1.domain.Tables;
+import kpersistence.v1.query.KFilter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import rest.response.tables.TableDataResponse;
+import kpersistence.v2.tables.StringIdTable;
+import rest.v2.response.tables.TableDataResponse;
+import service.v1.AbstractTableService;
 
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,6 @@ import java.util.Map;
 public abstract class AbstractTableController<T extends StringIdTable, F extends KFilter> {
 
     protected abstract AbstractTableService<T> getService();
-    protected abstract DictionaryService getDictionaryService();
 
     @GetMapping("/get_all")
     public TableDataResponse<T> getAll() {
@@ -34,7 +31,7 @@ public abstract class AbstractTableController<T extends StringIdTable, F extends
     }
 
     protected TableDataResponse<T> getAllTranslatedResponse(List<T> data) {
-        return new TableDataResponse<>(data, getDictionaryService());
+        return new TableDataResponse<>(data);
     }
 
     @PostMapping("/insert")

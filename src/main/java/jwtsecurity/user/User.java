@@ -1,9 +1,9 @@
 package jwtsecurity.user;
 
-import kpersistence.mapping.annotations.Column;
-import kpersistence.mapping.annotations.Entity;
-import kpersistence.mapping.annotations.Table;
-import repository.tables.StringIdTable;
+import kpersistence.v2.annotations.Column;
+import kpersistence.v1.mapping.annotations.Entity;
+import kpersistence.v2.annotations.Table;
+import kpersistence.v2.tables.StringIdTable;
 
 @Entity
 @Table(name = "users")

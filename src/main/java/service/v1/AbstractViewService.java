@@ -1,7 +1,7 @@
-package service;
+package service.v1;
 
-import repository.tables.AbstractView;
-import repository.AbstractViewRepository;
+import repository.v1.tables.AbstractView;
+import repository.v1.AbstractViewRepository;
 import kcollections.KList;
 import koptional.KOptional;
 

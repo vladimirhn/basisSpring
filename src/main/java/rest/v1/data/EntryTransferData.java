@@ -1,4 +1,4 @@
-package rest.data;
+package rest.v1.data;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import kcollections.KList;

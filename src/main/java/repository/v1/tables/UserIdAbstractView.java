@@ -1,10 +1,12 @@
-package repository.tables;
+package repository.v1.tables;
 
-import kpersistence.mapping.annotations.CurrentUserId;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import kpersistence.v1.mapping.annotations.CurrentUserId;
 
 public abstract class UserIdAbstractView extends AbstractView {
 
     @CurrentUserId
+    @JsonIgnore
     private String userId;
 
     public String getUserId() {

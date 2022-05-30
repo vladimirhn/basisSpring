@@ -1,15 +1,15 @@
-package repository;
+package repository.v1;
 
 import kcollections.CollectionFactory;
 import kcollections.KList;
 import kmodels.IdLabelWithParent;
-import kpersistence.RandomId;
-import kpersistence.QueryGenerator;
-import kpersistence.UnnamedParametersQuery;
-import kpersistence.mapping.annotations.Label;
-import kpersistence.types.SoftDelete;
+import kpersistence.v2.RandomId;
+import kpersistence.v1.queryGeneration.QueryGenerator;
+import kpersistence.v2.UnnamedParametersQuery;
+import kpersistence.v1.mapping.annotations.Label;
+import kpersistence.v1.types.SoftDelete;
 import kutils.ClassUtils;
-import repository.tables.StringIdTable;
+import kpersistence.v2.tables.StringIdTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;

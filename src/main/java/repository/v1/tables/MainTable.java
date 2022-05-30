@@ -1,4 +1,4 @@
-package repository.tables;
+package repository.v1.tables;
 
 import java.util.ArrayList;
 import java.util.List;

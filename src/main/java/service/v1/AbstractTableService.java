@@ -1,13 +1,11 @@
-package service;
+package service.v1;
 
 import kmodels.IdLabelWithParentList;
-import kpersistence.query.KFilter;
-import kpersistence.query.QueryProperties;
-import repository.tables.StringIdTable;
-import repository.AbstractTableRepository;
+import kpersistence.v1.query.QueryProperties;
+import kpersistence.v2.tables.StringIdTable;
+import repository.v1.AbstractTableRepository;
 import kcollections.KList;
 import koptional.KOptional;
-import rest.response.tables.TableDataResponse;
 
 import java.util.Map;
 import java.util.function.BiConsumer;

@@ -1,6 +1,6 @@
-package repository;
+package repository.v1;
 
-import repository.tables.AbstractView;
+import repository.v1.tables.AbstractView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;

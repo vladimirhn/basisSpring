@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import kpersistence.v2.tables.StringIdTable;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
 
@@ -32,10 +33,10 @@ public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
     public AbstractStringIdTableRepository() {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         ModelRepositoryMap.data.put(model, this);
-        rowMapper = new MapperByModel<T>(model)::mapRow;
+        rowMapper = new MapperByModel<>(model)::mapRow;
     }
 
-    private String user() {
+    protected String user() {
         return currentUserIdProvider != null ? currentUserIdProvider.getCurrentUserId() : null;
     }
 

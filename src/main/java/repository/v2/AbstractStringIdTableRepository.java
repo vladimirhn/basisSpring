@@ -5,24 +5,28 @@ import kcollections.KList;
 import kpersistence.v2.CurrentUserIdProvider;
 import kpersistence.v2.RandomId;
 import kpersistence.v2.UnnamedParametersQuery;
-import kpersistence.v2.mapping.MapperByModel;
-import kpersistence.v2.queryGeneration.*;
+import kpersistence.v2.mapping.MapperAllDataByModel;
+import kpersistence.v2.mapping.MapperLabelsByModel;
+import kpersistence.v2.modelsMaster.ModelsMaster;
+import kpersistence.v2.queryGeneration.DeleteQueryGenerator;
+import kpersistence.v2.queryGeneration.InsertQueryGenerator;
+import kpersistence.v2.queryGeneration.UpdateQueryGenerator;
 import kpersistence.v2.queryGeneration.select.SelectAllQueryGenerator;
 import kpersistence.v2.queryGeneration.select.SelectFilteredQueryGenerator;
+import kpersistence.v2.tables.StringIdTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import kpersistence.v2.tables.StringIdTable;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.List;
 
 public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
 
     Class<T> model;
     public static CurrentUserIdProvider currentUserIdProvider;
-    RowMapper<T> rowMapper;
+    RowMapper<T> allDataRowMapper;
+    RowMapper<T> labelsRowMapper;
 
     @Autowired
     protected JdbcOperations jdbcOperations;
@@ -33,7 +37,8 @@ public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
     public AbstractStringIdTableRepository() {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         ModelRepositoryMap.data.put(model, this);
-        rowMapper = new MapperByModel<>(model)::mapRow;
+        allDataRowMapper = new MapperAllDataByModel<>(model)::mapRow;
+        labelsRowMapper = new MapperLabelsByModel<>(model)::mapRow;
     }
 
     protected String user() {
@@ -41,17 +46,31 @@ public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
     }
 
     public KList<T> selectAll(String orderByFieldName, String direction) {
-        UnnamedParametersQuery query = new SelectAllQueryGenerator(model, user(), orderByFieldName, direction).generateSelectAllQuery();
+        UnnamedParametersQuery query = new SelectAllQueryGenerator(ModelsMaster.getQueryAllDataModel(model), user(), orderByFieldName, direction).generateSelectAllQuery();
         System.out.println(query);
 
-        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), rowMapper);
+        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), allDataRowMapper);
+    }
+
+    public KList<T> selectAllLabels(String orderByFieldName, String direction) {
+        UnnamedParametersQuery query = new SelectAllQueryGenerator(ModelsMaster.getQueryLabelsModel(model), user(), orderByFieldName, direction).generateSelectAllQuery();
+        System.out.println(query);
+
+        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), labelsRowMapper);
     }
 
     public KList<T> selectFiltered(T data) {
-        UnnamedParametersQuery query = new SelectFilteredQueryGenerator(data, user()).generateSelectFilteredQuery();
+        UnnamedParametersQuery query = new SelectFilteredQueryGenerator(ModelsMaster.getQueryAllDataModel(model), data, user()).generateSelectFilteredQuery();
         System.out.println(query);
 
-        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), rowMapper);
+        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), allDataRowMapper);
+    }
+
+    public KList<T> selectFilteredLabels(T data) {
+        UnnamedParametersQuery query = new SelectFilteredQueryGenerator(ModelsMaster.getQueryLabelsModel(model), data, user()).generateSelectFilteredQuery();
+        System.out.println(query);
+
+        return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), labelsRowMapper);
     }
 
     public String insert(T data) {

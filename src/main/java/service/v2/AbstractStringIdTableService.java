@@ -28,8 +28,16 @@ public abstract class AbstractStringIdTableService <T extends StringIdTable> {
         return repository().selectAll(orderByFieldName, direction);
     }
 
+    public KList<T> selectAllLabels(String orderByFieldName, String direction) {
+        return repository().selectAllLabels(orderByFieldName, direction);
+    }
+
     public KList<T> selectFiltered(T data) {
         return repository().selectFiltered(data);
+    }
+
+    public KList<T> selectFilteredLabels(T data) {
+        return repository().selectFilteredLabels(data);
     }
 
     public String insert(T data) {

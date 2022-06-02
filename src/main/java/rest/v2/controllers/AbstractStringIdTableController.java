@@ -36,14 +36,32 @@ public abstract class AbstractStringIdTableController<T extends StringIdTable> {
         return result;
     }
 
+    @GetMapping("/get_all_labels/{orderByFieldName}/{direction}")
+    public TableDataResponse<T> selectAllMinimum(
+            @PathVariable(value = "orderByFieldName") String orderByFieldName,
+            @PathVariable(value = "direction") String direction) {
+        TableDataResponse<T> result = new TableDataResponse<>(service().selectAllLabels(orderByFieldName, direction));
+        return result;
+    }
+
     @GetMapping("/get_all")
     public TableDataResponse<T> selectAll() {
         return selectAll(null, null);
     }
 
+    @GetMapping("/get_all_labels")
+    public TableDataResponse<T> selectAllMinimum() {
+        return selectAllMinimum(null, null);
+    }
+
     @PostMapping("/get_filtered")
     public TableDataResponse<T> selectFiltered(@RequestBody T data) {
         TableDataResponse<T> result = new TableDataResponse<>(service().selectFiltered(data));
+        return result;
+    }
+    @PostMapping("/get_filtered_labels")
+    public TableDataResponse<T> selectFilteredLabels(@RequestBody T data) {
+        TableDataResponse<T> result = new TableDataResponse<>(service().selectFilteredLabels(data));
         return result;
     }
 

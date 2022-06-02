@@ -1,6 +1,7 @@
 package rest.v2.controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import kpersistence.v2.tables.StringIdTable;
@@ -9,6 +10,7 @@ import service.v2.AbstractStringIdTableService;
 import service.v2.ModelServiceMap;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.List;
 
 public abstract class AbstractStringIdTableController<T extends StringIdTable> {
 
@@ -26,13 +28,20 @@ public abstract class AbstractStringIdTableController<T extends StringIdTable> {
         return service;
     }
 
-    @GetMapping("/select_all")
-    public TableDataResponse<T> selectAll() {
-        TableDataResponse<T> result = new TableDataResponse<>(service().selectAll());
+    @GetMapping("/get_all/{orderByFieldName}/{direction}")
+    public TableDataResponse<T> selectAll(
+            @PathVariable(value = "orderByFieldName") String orderByFieldName,
+            @PathVariable(value = "direction") String direction) {
+        TableDataResponse<T> result = new TableDataResponse<>(service().selectAll(orderByFieldName, direction));
         return result;
     }
 
-    @PostMapping("/select_filtered")
+    @GetMapping("/get_all")
+    public TableDataResponse<T> selectAll() {
+        return selectAll(null, null);
+    }
+
+    @PostMapping("/get_filtered")
     public TableDataResponse<T> selectFiltered(@RequestBody T data) {
         TableDataResponse<T> result = new TableDataResponse<>(service().selectFiltered(data));
         return result;
@@ -43,13 +52,20 @@ public abstract class AbstractStringIdTableController<T extends StringIdTable> {
         service().insert(data);
     }
 
+    @PostMapping("/insert_all")
+    public void insertAll(@RequestBody List<T> data) {
+        for (T datum : data) {
+            service().insert(datum);
+        }
+    }
+
     @PostMapping("/update")
     public void update(@RequestBody T data) {
         service().update(data);
     }
 
-    @PostMapping("/delete")
-    public String update(@RequestBody String id) {
+    @GetMapping("/delete/{id}")
+    public String update(@PathVariable(value = "id") String id) {
         return service().delete(id);
     }
 }

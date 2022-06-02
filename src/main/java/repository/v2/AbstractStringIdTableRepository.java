@@ -7,6 +7,8 @@ import kpersistence.v2.RandomId;
 import kpersistence.v2.UnnamedParametersQuery;
 import kpersistence.v2.mapping.MapperByModel;
 import kpersistence.v2.queryGeneration.*;
+import kpersistence.v2.queryGeneration.select.SelectAllQueryGenerator;
+import kpersistence.v2.queryGeneration.select.SelectFilteredQueryGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
@@ -37,8 +39,8 @@ public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
         return currentUserIdProvider != null ? currentUserIdProvider.getCurrentUserId() : null;
     }
 
-    public KList<T> selectAll() {
-        UnnamedParametersQuery query = new SelectAllQueryGenerator(model, user()).generateSelectAllQuery();
+    public KList<T> selectAll(String orderByFieldName, String direction) {
+        UnnamedParametersQuery query = new SelectAllQueryGenerator(model, user(), orderByFieldName, direction).generateSelectAllQuery();
         System.out.println(query);
 
         return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), rowMapper);

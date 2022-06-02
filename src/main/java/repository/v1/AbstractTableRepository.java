@@ -3,11 +3,13 @@ package repository.v1;
 import kcollections.CollectionFactory;
 import kcollections.KList;
 import kmodels.IdLabelWithParent;
+import kpersistence.v2.CurrentUserIdProvider;
 import kpersistence.v2.RandomId;
 import kpersistence.v1.queryGeneration.QueryGenerator;
 import kpersistence.v2.UnnamedParametersQuery;
 import kpersistence.v2.annotations.Label;
 import kpersistence.v1.types.SoftDelete;
+import kpersistence.v2.tables.UserIdStringIdTable;
 import kutils.ClassUtils;
 import kpersistence.v2.tables.StringIdTable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,10 +65,17 @@ public abstract class AbstractTableRepository<T extends StringIdTable> extends A
         return result;
     }
 
+    public static CurrentUserIdProvider currentUserIdProvider;
+
     public String insert(T obj) {
         String id = RandomId.next();
         if (obj.getId() == null) obj.setId(id);
         obj.setDefaults();
+
+        if (obj instanceof UserIdStringIdTable) {
+            ((UserIdStringIdTable) obj).setUserId(currentUserIdProvider.getCurrentUserId());
+        }
+
         UnnamedParametersQuery qry = QueryGenerator.generateInsertQuery(obj);
         jdbcOperations.update(qry.getQuery(), qry.getParams());
 

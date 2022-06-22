@@ -1,5 +1,6 @@
 package repository.v2;
 
+import application.ContextProvider;
 import kcollections.CollectionFactory;
 import kcollections.KList;
 import kpersistence.v2.CurrentUserIdProvider;
@@ -21,22 +22,24 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
 import java.lang.reflect.ParameterizedType;
 
-public abstract class AbstractStringIdTableRepository<T extends StringIdTable> {
+public class AbstractStringIdTableRepository<T extends StringIdTable> implements AbstractStringIdTableRepositoryIf<T> {
 
     Class<T> model;
     public static CurrentUserIdProvider currentUserIdProvider;
     RowMapper<T> allDataRowMapper;
     RowMapper<T> labelsRowMapper;
 
-    @Autowired
-    protected JdbcOperations jdbcOperations;
-
-    @Autowired
-    protected NamedParameterJdbcOperations namedParameterJdbcOperations;
+    protected JdbcOperations jdbcOperations = ContextProvider.getContext().getBean(JdbcOperations.class);
+    protected NamedParameterJdbcOperations namedParameterJdbcOperations = ContextProvider.getContext().getBean(NamedParameterJdbcOperations.class);
 
     public AbstractStringIdTableRepository() {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         ModelRepositoryMap.data.put(model, this);
+        allDataRowMapper = new MapperAllDataByModel<>(model)::mapRow;
+        labelsRowMapper = new MapperLabelsByModel<>(model)::mapRow;
+    }
+    public AbstractStringIdTableRepository(Class<T> model) {
+        this.model = model;
         allDataRowMapper = new MapperAllDataByModel<>(model)::mapRow;
         labelsRowMapper = new MapperLabelsByModel<>(model)::mapRow;
     }

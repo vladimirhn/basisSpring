@@ -1,25 +1,40 @@
 package service.v2;
 
 import kcollections.KList;
-import repository.v2.AbstractStringIdTableRepository;
-import repository.v2.ModelRepositoryMap;
 import kpersistence.v2.tables.StringIdTable;
+import repository.v2.AbstractStringIdTableRepository;
+import repository.v2.AbstractStringIdTableRepositoryIf;
+import repository.v2.ModelRepositoryMap;
+import repository.v2.RepositoryInvocationHandler;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
 
-public abstract class AbstractStringIdTableService <T extends StringIdTable> {
+public class AbstractStringIdTableService <T extends StringIdTable> implements AbstractStringIdTableServiceIf<T> {
 
     protected Class<T> model;
-    private AbstractStringIdTableRepository<T> repository;
+    private AbstractStringIdTableRepositoryIf<T> repository;
 
     public AbstractStringIdTableService() {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         ModelServiceMap.data.put(model, this);
     }
 
-    protected AbstractStringIdTableRepository<T> repository() {
+    public AbstractStringIdTableService(Class<T> model) {
+        this.model = model;
+    }
+
+    protected AbstractStringIdTableRepositoryIf<T> repository() {
         if (repository == null) {
             repository = (AbstractStringIdTableRepository<T>) ModelRepositoryMap.data.get(model);
+
+            if (repository == null) {
+                AbstractStringIdTableRepositoryIf proxyInstance = (AbstractStringIdTableRepositoryIf) Proxy.newProxyInstance(
+                        getClass().getClassLoader(),
+                        new Class[] { AbstractStringIdTableRepositoryIf.class },
+                        new RepositoryInvocationHandler(new AbstractStringIdTableRepository<>(model)));
+                repository = proxyInstance;
+            }
         }
         return repository;
     }

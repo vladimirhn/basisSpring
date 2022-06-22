@@ -7,23 +7,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import kpersistence.v2.tables.StringIdTable;
 import rest.v2.response.tables.TableDataResponse;
 import service.v2.AbstractStringIdTableService;
+import service.v2.AbstractStringIdTableServiceIf;
 import service.v2.ModelServiceMap;
+import service.v2.ServiceInvocationHandler;
 
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Proxy;
 import java.util.List;
 
 public abstract class AbstractStringIdTableController<T extends StringIdTable> {
 
     Class<T> model;
-    AbstractStringIdTableService<T> service;
+    AbstractStringIdTableServiceIf<T> service;
 
     public AbstractStringIdTableController() {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    private AbstractStringIdTableService<T> service() {
+    private AbstractStringIdTableServiceIf<T> service() {
         if (service == null) {
             service = (AbstractStringIdTableService<T>) ModelServiceMap.data.get(model);
+
+            if (service == null) {
+                AbstractStringIdTableServiceIf proxyInstance = (AbstractStringIdTableServiceIf) Proxy.newProxyInstance(
+                        getClass().getClassLoader(),
+                        new Class[] { AbstractStringIdTableServiceIf.class },
+                        new ServiceInvocationHandler(new AbstractStringIdTableService<>(model)));
+                service = proxyInstance;
+            }
         }
         return service;
     }

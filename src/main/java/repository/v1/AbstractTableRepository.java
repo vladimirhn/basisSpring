@@ -8,7 +8,7 @@ import kpersistence.v2.RandomId;
 import kpersistence.v1.queryGeneration.QueryGenerator;
 import kpersistence.v2.UnnamedParametersQuery;
 import kpersistence.v2.annotations.Label;
-import kpersistence.v1.types.SoftDelete;
+import kpersistence.v2.types.SoftDelete;
 import kpersistence.v2.tables.UserIdStringIdTable;
 import kutils.ClassUtils;
 import kpersistence.v2.tables.StringIdTable;

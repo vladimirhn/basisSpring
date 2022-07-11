@@ -1,5 +1,6 @@
 package service.v1;
 
+import kpersistence.v2.tables.Table;
 import repository.v1.tables.AbstractView;
 import repository.v1.AbstractViewRepository;
 import kcollections.KList;
@@ -8,7 +9,7 @@ import koptional.KOptional;
 import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
-public abstract class AbstractViewService<T extends AbstractView> {
+public abstract class AbstractViewService<T extends Table> {
 
     protected abstract AbstractViewRepository<T> getRepository();
 

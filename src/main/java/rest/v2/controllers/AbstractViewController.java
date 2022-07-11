@@ -1,32 +1,31 @@
 package rest.v2.controllers;
 
-import kpersistence.v2.tables.StringIdTable;
+import kpersistence.v2.tables.UserIdView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import rest.v2.response.tables.TableDataResponse;
-import service.v2.AbstractStringIdTableService;
+import service.v2.AbstractViewService;
 import service.v2.ModelServiceMap;
 
 import java.lang.reflect.ParameterizedType;
-import java.util.List;
 
-public abstract class AbstractStringIdTableController<T extends StringIdTable> {
+public abstract class AbstractViewController<T extends UserIdView> {
 
     Class<T> model;
-    AbstractStringIdTableService<T> service;
+    AbstractViewService<T> service;
 
-    public AbstractStringIdTableController() {
+    public AbstractViewController() {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    private AbstractStringIdTableService<T> service() {
+    private AbstractViewService<T> service() {
         if (service == null) {
-            service = (AbstractStringIdTableService<T>) ModelServiceMap.data.get(model);
+            service = (AbstractViewService<T>) ModelServiceMap.data.get(model);
 
             if (service == null) {
-                service = new AbstractStringIdTableService<>(model);
+                service = new AbstractViewService<>(model);
             }
         }
         return service;
@@ -67,27 +66,5 @@ public abstract class AbstractStringIdTableController<T extends StringIdTable> {
     public TableDataResponse<T> selectFilteredLabels(@RequestBody T data) {
         TableDataResponse<T> result = new TableDataResponse<>(service().selectFilteredLabels(data));
         return result;
-    }
-
-    @PostMapping("/insert")
-    public void insert(@RequestBody T data) {
-        service().insert(data);
-    }
-
-    @PostMapping("/insert_all")
-    public void insertAll(@RequestBody List<T> data) {
-        for (T datum : data) {
-            service().insert(datum);
-        }
-    }
-
-    @PostMapping("/update")
-    public void update(@RequestBody T data) {
-        service().update(data);
-    }
-
-    @GetMapping("/delete/{id}")
-    public String update(@PathVariable(value = "id") String id) {
-        return service().delete(id);
     }
 }

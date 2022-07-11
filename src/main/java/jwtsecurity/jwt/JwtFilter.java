@@ -69,15 +69,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
             } catch (Exception e) {
 
-                final ResponseCookie responseCookie = ResponseCookie
-                        .from("a", token)
-                        .secure(true)
-                        .httpOnly(true)
-                        .path("/")
-                        .maxAge(0)
-                        .sameSite("Strict")
-                        .build();
-                ((HttpServletResponse)servletResponse).addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+//                final ResponseCookie responseCookie = ResponseCookie
+//                        .from("a", token)
+//                        .secure(true)
+//                        .httpOnly(true)
+//                        .path("/")
+//                        .maxAge(0)
+//                        .sameSite("Strict")
+//                        .build();
+//                ((HttpServletResponse)servletResponse).addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
             }
         }
 

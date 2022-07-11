@@ -1,32 +1,32 @@
 package service.v2;
 
 import kcollections.KList;
-import kpersistence.v2.tables.StringIdTable;
-import repository.v2.AbstractStringIdTableRepository;
+import kpersistence.v2.tables.UserIdView;
+import repository.v2.AbstractViewRepository;
 import repository.v2.ModelRepositoryMap;
 
 import java.lang.reflect.ParameterizedType;
 
-public class AbstractStringIdTableService <T extends StringIdTable> extends AbstractService<T> {
+public class AbstractViewService<T extends UserIdView> extends AbstractService<T> {
 
     protected Class<T> model;
-    private AbstractStringIdTableRepository<T> repository;
+    private AbstractViewRepository<T> repository;
 
-    public AbstractStringIdTableService() {
+    public AbstractViewService() {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
         ModelServiceMap.data.put(model, this);
     }
 
-    public AbstractStringIdTableService(Class<T> model) {
+    public AbstractViewService(Class<T> model) {
         this.model = model;
     }
 
-    protected AbstractStringIdTableRepository<T> repository() {
+    protected AbstractViewRepository<T> repository() {
         if (repository == null) {
-            repository = (AbstractStringIdTableRepository<T>) ModelRepositoryMap.data.get(model);
+            repository = (AbstractViewRepository<T>) ModelRepositoryMap.data.get(model);
 
             if (repository == null) {
-                repository = new AbstractStringIdTableRepository<>(model);
+                repository = new AbstractViewRepository<>(model);
             }
         }
         return repository;
@@ -48,15 +48,4 @@ public class AbstractStringIdTableService <T extends StringIdTable> extends Abst
         return repository().selectFilteredLabels(data);
     }
 
-    public String insert(T data) {
-        return repository().insert(data);
-    }
-
-    public void update(T data) {
-        repository().update(data);
-    }
-
-    public String delete(String id) {
-        return repository().delete(id);
-    }
 }

@@ -1,6 +1,7 @@
 package rest.v2.controllers;
 
 import kpersistence.v2.tables.StringIdTable;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,7 @@ import service.v2.ModelServiceMap;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
+@Transactional
 public abstract class AbstractStringIdTableController<T extends StringIdTable> {
 
     Class<T> model;
@@ -21,7 +23,7 @@ public abstract class AbstractStringIdTableController<T extends StringIdTable> {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    private AbstractStringIdTableService<T> service() {
+    protected AbstractStringIdTableService<T> service() {
         if (service == null) {
             service = (AbstractStringIdTableService<T>) ModelServiceMap.data.get(model);
 

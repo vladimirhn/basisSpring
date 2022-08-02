@@ -20,7 +20,7 @@ public abstract class AbstractViewController<T extends UserIdView> {
         model = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
-    private AbstractViewService<T> service() {
+    protected AbstractViewService<T> service() {
         if (service == null) {
             service = (AbstractViewService<T>) ModelServiceMap.data.get(model);
 

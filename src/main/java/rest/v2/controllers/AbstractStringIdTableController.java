@@ -89,7 +89,7 @@ public abstract class AbstractStringIdTableController<T extends StringIdTable> {
     }
 
     @GetMapping("/delete/{id}")
-    public String update(@PathVariable(value = "id") String id) {
+    public String delete(@PathVariable(value = "id") String id) {
         return service().delete(id);
     }
 }

@@ -1,4 +1,4 @@
-package rest.v2.schema;
+package rest.schema;
 
 import kutils.PackageUtils;
 import org.springframework.web.bind.annotation.RequestMapping;

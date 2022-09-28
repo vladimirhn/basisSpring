@@ -1,4 +1,4 @@
-package rest.v2.response;
+package rest.response;
 
 
 public class KResponse {

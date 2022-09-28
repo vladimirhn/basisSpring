@@ -1,4 +1,4 @@
-package service.v2;
+package service;
 
 import kpersistence.tables.Table;
 

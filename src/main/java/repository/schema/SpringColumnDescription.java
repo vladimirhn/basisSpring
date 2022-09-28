@@ -1,4 +1,4 @@
-package repository.v2.schema;
+package repository.schema;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import kpersistence.modelsMaster.schema.ColumnDescription;

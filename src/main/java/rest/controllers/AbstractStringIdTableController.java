@@ -1,4 +1,4 @@
-package rest.v2.controllers;
+package rest.controllers;
 
 import kpersistence.tables.StringIdTable;
 import org.springframework.transaction.annotation.Transactional;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import rest.v2.response.tables.TableDataResponse;
-import service.v2.AbstractStringIdTableService;
-import service.v2.ModelServiceMap;
+import rest.response.tables.TableDataResponse;
+import service.AbstractStringIdTableService;
+import service.ModelServiceMap;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;

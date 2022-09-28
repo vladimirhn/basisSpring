@@ -1,9 +1,9 @@
-package repository.v2.schema;
+package repository.schema;
 
 import kpersistence.modelsMaster.schema.ColumnDescription;
 import kpersistence.modelsMaster.schema.TableDescription;
 import kutils.ClassUtils;
-import rest.v2.schema.ModelsEndpointsSchema;
+import rest.schema.ModelsEndpointsSchema;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

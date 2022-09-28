@@ -1,9 +1,9 @@
-package service.v2;
+package service;
 
 import kcollections.KList;
 import kpersistence.tables.UserIdView;
-import repository.v2.AbstractViewRepository;
-import repository.v2.ModelRepositoryMap;
+import repository.AbstractViewRepository;
+import repository.ModelRepositoryMap;
 
 import java.lang.reflect.ParameterizedType;
 

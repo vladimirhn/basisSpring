@@ -1,4 +1,4 @@
-package repository.v2;
+package repository;
 
 import kpersistence.tables.Table;
 

@@ -3,7 +3,7 @@ package jwtsecurity.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import service.v2.AbstractStringIdTableService;
+import service.AbstractStringIdTableService;
 
 
 @Service

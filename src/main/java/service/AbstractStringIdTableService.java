@@ -1,9 +1,9 @@
-package service.v2;
+package service;
 
 import kcollections.KList;
 import kpersistence.tables.StringIdTable;
-import repository.v2.AbstractStringIdTableRepository;
-import repository.v2.ModelRepositoryMap;
+import repository.AbstractStringIdTableRepository;
+import repository.ModelRepositoryMap;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.function.BiConsumer;

@@ -4,7 +4,7 @@ import jwtsecurity.userdetails.CustomUserDetails;
 import kpersistence.CurrentUserIdProvider;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import repository.v2.AbstractStringIdTableRepository;
+import repository.AbstractStringIdTableRepository;
 
 @Component
 public class SpringApplicationUserProvider implements CurrentUserIdProvider {

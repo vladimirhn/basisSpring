@@ -1,6 +1,6 @@
-package rest.v2.response.tables;
+package rest.response.tables;
 
-import rest.v2.response.KResponse;
+import rest.response.KResponse;
 
 import java.util.ArrayList;
 import java.util.List;

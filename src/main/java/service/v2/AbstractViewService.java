@@ -32,6 +32,10 @@ public class AbstractViewService<T extends UserIdView> extends AbstractService<T
         return repository;
     }
 
+    public KList<T> selectAll() {
+        return selectAll(null, null);
+    }
+
     public KList<T> selectAll(String orderByFieldName, String direction) {
         return repository().selectAll(orderByFieldName, direction);
     }

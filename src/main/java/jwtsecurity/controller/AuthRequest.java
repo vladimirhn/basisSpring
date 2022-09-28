@@ -3,7 +3,7 @@ package jwtsecurity.controller;
 public class AuthRequest {
 
     private String login;
-    private String password;
+    private char[] password;
 
     public String getLogin() {
         return login;
@@ -14,10 +14,10 @@ public class AuthRequest {
     }
 
     public String getPassword() {
-        return password;
+        return new String(password);
     }
 
-    public void setPassword(String password) {
+    public void setPassword(char[] password) {
         this.password = password;
     }
 }

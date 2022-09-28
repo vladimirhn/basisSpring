@@ -6,6 +6,7 @@ import repository.v2.AbstractStringIdTableRepository;
 import repository.v2.ModelRepositoryMap;
 
 import java.lang.reflect.ParameterizedType;
+import java.util.function.BiConsumer;
 
 public class AbstractStringIdTableService <T extends StringIdTable> extends AbstractService<T> {
 
@@ -44,6 +45,10 @@ public class AbstractStringIdTableService <T extends StringIdTable> extends Abst
         return repository().selectFiltered(data);
     }
 
+    public T selectOne(String id) throws Exception {
+        return repository().selectOne(id);
+    }
+
     public KList<T> selectFilteredLabels(T data) {
         return repository().selectFilteredLabels(data);
     }
@@ -58,5 +63,9 @@ public class AbstractStringIdTableService <T extends StringIdTable> extends Abst
 
     public String delete(String id) {
         return repository().delete(id);
+    }
+
+    public <V> String deleteByField(BiConsumer<T, V> fieldSetter, V fieldValue) {
+        return repository().deleteByField(fieldSetter, fieldValue);
     }
 }

@@ -13,8 +13,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     private UsersService usersService;
 
     @Override
-    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = usersService.findOne(username).get();
+    public CustomUserDetails loadUserByUsername(String userId) throws UsernameNotFoundException {
+        User user = null;
+        try {
+            user = usersService.findById(userId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new UsernameNotFoundException("User not found");
+        }
         return CustomUserDetails.fromUserToCustomUserDetails(user);
     }
 }

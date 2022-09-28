@@ -1,26 +1,18 @@
 package repository.v2;
 
-import application.ContextProvider;
-import kcollections.CollectionFactory;
-import kcollections.KList;
-import kpersistence.v2.CurrentUserIdProvider;
 import kpersistence.v2.RandomId;
 import kpersistence.v2.UnnamedParametersQuery;
 import kpersistence.v2.mapping.MapperAllDataByModel;
 import kpersistence.v2.mapping.MapperLabelsByModel;
-import kpersistence.v2.modelsMaster.ModelsMaster;
-import kpersistence.v2.queryGeneration.DeleteQueryGenerator;
-import kpersistence.v2.queryGeneration.InsertQueryGenerator;
-import kpersistence.v2.queryGeneration.UpdateQueryGenerator;
-import kpersistence.v2.queryGeneration.select.SelectAllQueryGenerator;
-import kpersistence.v2.queryGeneration.select.SelectFilteredQueryGenerator;
+import kpersistence.v2.queryGeneration.change.DeleteQueryGenerator;
+import kpersistence.v2.queryGeneration.change.DeleteSimilarQueryGenerator;
+import kpersistence.v2.queryGeneration.change.InsertQueryGenerator;
+import kpersistence.v2.queryGeneration.change.UpdateQueryGenerator;
 import kpersistence.v2.tables.StringIdTable;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
+import java.util.function.BiConsumer;
 
 public class AbstractStringIdTableRepository<T extends StringIdTable> extends AbstractRepository<T> {
 
@@ -33,6 +25,13 @@ public class AbstractStringIdTableRepository<T extends StringIdTable> extends Ab
     }
     public AbstractStringIdTableRepository(Class<T> model) {
         super(model);
+    }
+
+    public T selectOne(String id) throws Exception {
+        T example = model.getConstructor().newInstance();
+        example.setId(id);
+
+        return selectFiltered(example).getFirst().orElseThrow();
     }
 
     public String insert(T data) {
@@ -58,5 +57,27 @@ public class AbstractStringIdTableRepository<T extends StringIdTable> extends Ab
         jdbcOperations.update(query.getQuery(), query.getParams());
 
         return id;
+    }
+
+    public String deleteSimilar(T data) {
+        UnnamedParametersQuery query = new DeleteSimilarQueryGenerator<>(model, data, user()).generateDeleteQuery();
+        System.out.println(query);
+
+        jdbcOperations.update(query.getQuery(), query.getParams());
+
+        return data.getId();
+    }
+
+    public <V> String deleteByField(BiConsumer<T, V> fieldSetter, V fieldValue) {
+        try {
+            T instance = model.getDeclaredConstructor().newInstance();
+            fieldSetter.accept(instance, fieldValue);
+
+            return deleteSimilar(instance);
+
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

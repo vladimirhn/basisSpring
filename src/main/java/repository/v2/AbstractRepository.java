@@ -2,6 +2,7 @@ package repository.v2;
 
 import application.ContextProvider;
 import kcollections.CollectionFactory;
+import kcollections.KCollection;
 import kcollections.KList;
 import kpersistence.v2.CurrentUserIdProvider;
 import kpersistence.v2.UnnamedParametersQuery;
@@ -14,6 +15,15 @@ import kpersistence.v2.tables.Table;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public abstract class AbstractRepository <T extends Table> {
 
@@ -64,5 +74,24 @@ public abstract class AbstractRepository <T extends Table> {
         System.out.println(query);
 
         return CollectionFactory.makeListFrom(jdbcOperations::query, query.getQuery(), query.getParams(), labelsRowMapper);
+    }
+
+    public <V> KList<T> selectByField(BiConsumer<T, V> fieldSetter, V fieldValue) {
+        try {
+            T instance = model.getDeclaredConstructor().newInstance();
+            fieldSetter.accept(instance, fieldValue);
+
+            return selectFiltered(instance);
+
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            e.printStackTrace();
+            return CollectionFactory.makeArrayList();
+        }
+    }
+
+    public KList<T> customSelect(String sql, Object[] params) {
+        System.out.println(sql);
+        Arrays.stream(params).forEach(System.out::println);
+        return CollectionFactory.makeListFrom(jdbcOperations::query, sql, params, allDataRowMapper);
     }
 }

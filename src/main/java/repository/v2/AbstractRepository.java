@@ -2,28 +2,22 @@ package repository.v2;
 
 import application.ContextProvider;
 import kcollections.CollectionFactory;
-import kcollections.KCollection;
 import kcollections.KList;
-import kpersistence.v2.CurrentUserIdProvider;
-import kpersistence.v2.UnnamedParametersQuery;
-import kpersistence.v2.mapping.MapperAllDataByModel;
-import kpersistence.v2.mapping.MapperLabelsByModel;
-import kpersistence.v2.modelsMaster.ModelsMaster;
-import kpersistence.v2.queryGeneration.select.SelectAllQueryGenerator;
-import kpersistence.v2.queryGeneration.select.SelectFilteredQueryGenerator;
-import kpersistence.v2.tables.Table;
+import kpersistence.CurrentUserIdProvider;
+import kpersistence.UnnamedParametersQuery;
+import kpersistence.mapping.MapperAllDataByModel;
+import kpersistence.mapping.MapperLabelsByModel;
+import kpersistence.modelsMaster.ModelsMaster;
+import kpersistence.queryGeneration.select.SelectAllQueryGenerator;
+import kpersistence.queryGeneration.select.SelectFilteredQueryGenerator;
+import kpersistence.tables.Table;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public abstract class AbstractRepository <T extends Table> {
 

@@ -1,6 +1,6 @@
 package rest.v2.controllers;
 
-import kpersistence.v2.tables.StringIdTable;
+import kpersistence.tables.StringIdTable;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

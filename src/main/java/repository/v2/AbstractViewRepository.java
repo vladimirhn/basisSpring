@@ -1,8 +1,8 @@
 package repository.v2;
 
-import kpersistence.v2.mapping.MapperAllDataByModel;
-import kpersistence.v2.mapping.MapperLabelsByModel;
-import kpersistence.v2.tables.UserIdView;
+import kpersistence.mapping.MapperAllDataByModel;
+import kpersistence.mapping.MapperLabelsByModel;
+import kpersistence.tables.UserIdView;
 
 import java.lang.reflect.ParameterizedType;
 

@@ -1,7 +1,7 @@
 package jwtsecurity.user;
 
 import jwtsecurity.userdetails.CustomUserDetails;
-import kpersistence.v2.CurrentUserIdProvider;
+import kpersistence.CurrentUserIdProvider;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import repository.v2.AbstractStringIdTableRepository;

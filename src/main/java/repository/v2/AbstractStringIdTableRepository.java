@@ -1,14 +1,14 @@
 package repository.v2;
 
-import kpersistence.v2.RandomId;
-import kpersistence.v2.UnnamedParametersQuery;
-import kpersistence.v2.mapping.MapperAllDataByModel;
-import kpersistence.v2.mapping.MapperLabelsByModel;
-import kpersistence.v2.queryGeneration.change.DeleteQueryGenerator;
-import kpersistence.v2.queryGeneration.change.DeleteSimilarQueryGenerator;
-import kpersistence.v2.queryGeneration.change.InsertQueryGenerator;
-import kpersistence.v2.queryGeneration.change.UpdateQueryGenerator;
-import kpersistence.v2.tables.StringIdTable;
+import kpersistence.RandomId;
+import kpersistence.UnnamedParametersQuery;
+import kpersistence.mapping.MapperAllDataByModel;
+import kpersistence.mapping.MapperLabelsByModel;
+import kpersistence.queryGeneration.change.DeleteQueryGenerator;
+import kpersistence.queryGeneration.change.DeleteSimilarQueryGenerator;
+import kpersistence.queryGeneration.change.InsertQueryGenerator;
+import kpersistence.queryGeneration.change.UpdateQueryGenerator;
+import kpersistence.tables.StringIdTable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;

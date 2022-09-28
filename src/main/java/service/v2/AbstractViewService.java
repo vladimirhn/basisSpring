@@ -1,7 +1,7 @@
 package service.v2;
 
 import kcollections.KList;
-import kpersistence.v2.tables.UserIdView;
+import kpersistence.tables.UserIdView;
 import repository.v2.AbstractViewRepository;
 import repository.v2.ModelRepositoryMap;
 

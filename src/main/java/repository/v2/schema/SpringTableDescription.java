@@ -1,7 +1,7 @@
 package repository.v2.schema;
 
-import kpersistence.v2.modelsMaster.schema.ColumnDescription;
-import kpersistence.v2.modelsMaster.schema.TableDescription;
+import kpersistence.modelsMaster.schema.ColumnDescription;
+import kpersistence.modelsMaster.schema.TableDescription;
 import kutils.ClassUtils;
 import rest.v2.schema.ModelsEndpointsSchema;
 

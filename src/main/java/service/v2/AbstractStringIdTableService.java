@@ -1,7 +1,7 @@
 package service.v2;
 
 import kcollections.KList;
-import kpersistence.v2.tables.StringIdTable;
+import kpersistence.tables.StringIdTable;
 import repository.v2.AbstractStringIdTableRepository;
 import repository.v2.ModelRepositoryMap;
 

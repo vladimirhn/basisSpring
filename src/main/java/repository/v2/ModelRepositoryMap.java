@@ -1,6 +1,6 @@
 package repository.v2;
 
-import kpersistence.v2.tables.Table;
+import kpersistence.tables.Table;
 
 import java.util.HashMap;
 import java.util.Map;
